@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HubSpot Landing Page Builder</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
+
+    /* Header */
+    .header { background: linear-gradient(135deg, #0f3460, #16213e); color: #fff; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; }
+    .header h1 { font-size: 1.4rem; font-weight: 700; }
+    .header .badge { background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; }
+    .header .connection-status { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; }
+    .header .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .header .dot.ok { background: #22c55e; }
+    .header .dot.err { background: #ef4444; }
+
+    /* Layout */
+    .layout { display: grid; grid-template-columns: 420px 1fr; min-height: calc(100vh - 72px); }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+    /* Sidebar / Form */
+    .sidebar { background: #fff; padding: 32px; overflow-y: auto; border-right: 1px solid #e5e7eb; }
+    .sidebar h2 { font-size: 1.15rem; margin-bottom: 20px; color: #0f3460; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #333; margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px;
+      font-size: 0.95rem; transition: border-color 0.2s; font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: #0f3460; box-shadow: 0 0 0 3px rgba(15,52,96,0.08);
+    }
+    .form-group textarea { resize: vertical; min-height: 60px; }
+    .form-group .hint { font-size: 0.78rem; color: #888; margin-top: 4px; }
+
+    .event-fields { display: none; }
+    .event-fields.show { display: block; }
+
+    .btn-row { display: flex; gap: 10px; margin-top: 24px; }
+    .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; flex: 1; }
+    .btn-primary { background: #0f3460; color: #fff; }
+    .btn-primary:hover { background: #0a2647; }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: #e5e7eb; color: #333; }
+    .btn-secondary:hover { background: #d1d5db; }
+    .btn-success { background: #16a34a; color: #fff; }
+    .btn-success:hover { background: #15803d; }
+    .btn-success:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Preview */
+    .preview { background: #e5e7eb; display: flex; flex-direction: column; }
+    .preview-toolbar { background: #fff; padding: 12px 24px; border-bottom: 1px solid #d1d5db; display: flex; align-items: center; justify-content: space-between; }
+    .preview-toolbar span { font-size: 0.85rem; color: #666; }
+    .preview-frame { flex: 1; }
+    .preview-frame iframe { width: 100%; height: 100%; border: none; background: #fff; }
+    .preview-placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: #999; font-size: 1.1rem; }
+
+    /* Status messages */
+    .status { padding: 12px 16px; border-radius: 8px; margin-top: 16px; font-size: 0.9rem; display: none; }
+    .status.show { display: block; }
+    .status.info { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .status.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+    /* Spinner */
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <h1>HubSpot Landing Page Builder</h1>
+      <span class="badge">AI-Powered</span>
+    </div>
+    <div class="connection-status" id="connStatus">
+      <span class="dot" id="connDot"></span>
+      <span id="connText">Checking...</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Form Sidebar -->
+    <div class="sidebar">
+      <h2>Page Configuration</h2>
+
+      <div class="form-group">
+        <label>Page Type</label>
+        <select id="pageType">
+          <option value="lead_gen">Lead Generation / Opt-In</option>
+          <option value="service">Service Showcase</option>
+          <option value="event">Event / Workshop</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Business Name</label>
+        <input type="text" id="businessName" placeholder="e.g. Acme Consulting">
+      </div>
+
+      <div class="form-group">
+        <label>Business Description</label>
+        <textarea id="businessDesc" rows="2" placeholder="What does the business do? (1-2 sentences)"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Target Audience</label>
+        <input type="text" id="audience" placeholder="e.g. Small business owners, K-12 educators">
+      </div>
+
+      <div class="form-group">
+        <label>Key Offering</label>
+        <input type="text" id="offering" placeholder="e.g. Free AI readiness assessment, workshop on March 15">
+      </div>
+
+      <div class="form-group">
+        <label>Tone</label>
+        <select id="tone">
+          <option value="professional">Professional</option>
+          <option value="warm">Warm & Approachable</option>
+          <option value="authoritative">Authoritative</option>
+          <option value="casual">Casual</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Visual Theme</label>
+        <select id="theme">
+          <option value="tech-innovation">Tech Innovation â Bold, modern, high-contrast</option>
+          <option value="ocean-depths">Ocean Depths â Professional maritime blues</option>
+          <option value="midnight-galaxy">Midnight Galaxy â Dramatic cosmic purples</option>
+          <option value="sunset-boulevard">Sunset Boulevard â Warm, vibrant sunset tones</option>
+          <option value="forest-canopy">Forest Canopy â Natural earth tones</option>
+          <option value="golden-hour">Golden Hour â Rich autumnal warmth</option>
+          <option value="arctic-frost">Arctic Frost â Cool, crisp precision</option>
+          <option value="desert-rose">Desert Rose â Soft, sophisticated dusty tones</option>
+          <option value="botanical-garden">Botanical Garden â Fresh, vibrant greens</option>
+          <option value="modern-minimalist">Modern Minimalist â Clean grayscale</option>
+        </select>
+        <div class="hint" id="themeBestFor" style="margin-top:4px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label>URL Slug (optional)</label>
+        <input type="text" id="slug" placeholder="e.g. ai-workshop-spring-2026">
+        <div class="hint">Leave blank for auto-generated slug</div>
+      </div>
+
+      <!-- Event-specific fields -->
+      <div class="event-fields" id="eventFields">
+        <div class="form-group">
+          <label>Event Date</label>
+          <input type="text" id="eventDate" placeholder="e.g. April 15, 2026">
+        </div>
+        <div class="form-group">
+          <label>Event Time</label>
+          <input type="text" id="eventTime" placeholder="e.g. 9:00 AM - 3:00 PM EST">
+        </div>
+        <div class="form-group">
+          <label>Event Location</label>
+          <input type="text" id="eventLocation" placeholder="e.g. Virtual / Zoom, or a venue name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Extra Instructions (optional)</label>
+        <textarea id="extra" rows="2" placeholder="Any additional copywriting guidance..."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnGenerate">Generate Preview</button>
+        <button class="btn btn-success" id="btnPublish" disabled>Push to HubSpot</button>
+      </div>
+
+      <div class="status" id="status"></div>
+    </div>
+
+    <!-- Preview Pane -->
+    <div class="preview">
+      <div class="preview-toolbar">
+        <span>Live Preview</span>
+        <button class="btn btn-secondary" id="btnDownload" style="padding:6px 14px; font-size:0.8rem; flex:none;" disabled>Download HTML</button>
+      </div>
+      <div class="preview-frame" id="previewFrame">
+        <div class="preview-placeholder">
+          Configure your page and click <strong>Generate Preview</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+
+    // State
+    let currentHtml = null;
+    let currentContent = null;
+
+    // Toggle event fields
+    $('pageType').addEventListener('change', () => {
+      $('eventFields').classList.toggle('show', $('pageType').value === 'event');
+    });
+
+    // Theme best-for hints
+    const themeBestFor = {
+      'tech-innovation': 'Best for: SaaS, startups, AI/ML, digital transformation',
+      'ocean-depths': 'Best for: Finance, consulting, corporate, professional services',
+      'midnight-galaxy': 'Best for: Entertainment, gaming, luxury brands, creative agencies',
+      'sunset-boulevard': 'Best for: Marketing, events, lifestyle brands, creative pitches',
+      'forest-canopy': 'Best for: Sustainability, wellness, education, outdoor brands',
+      'golden-hour': 'Best for: Hospitality, restaurants, artisan products, fall campaigns',
+      'arctic-frost': 'Best for: Healthcare, pharma, clean tech, data-driven businesses',
+      'desert-rose': 'Best for: Fashion, beauty, interior design, boutique businesses',
+      'botanical-garden': 'Best for: Food brands, farm-to-table, garden centers, natural products',
+      'modern-minimalist': 'Best for: Architecture, design, tech, modern business proposals',
+    };
+    function updateThemeHint() {
+      $('themeBestFor').textContent = themeBestFor[$('theme').value] || '';
+    }
+    $('theme').addEventListener('change', updateThemeHint);
+    updateThemeHint();
+
+    // Check connection on load
+    (async () => {
+      try {
+        const resp = await fetch('/api/status');
+        const data = await resp.json();
+        $('connDot').className = data.hubspot_connected ? 'dot ok' : 'dot err';
+        $('connText').textContent = data.hubspot_connected ? 'HubSpot Connected' : 'HubSpot Not Connected';
+      } catch {
+        $('connDot').className = 'dot err';
+        $('connText').textContent = 'Connection Error';
+      }
+    })();
+
+    function showStatus(msg, type) {
+      const el = $('status');
+      el.textContent = msg;
+      el.className = `status show ${type}`;
+    }
+
+    function clearStatus() {
+      $('status').className = 'status';
+    }
+
+    // Generate preview
+    $('btnGenerate').addEventListener('click', async () => {
+      clearStatus();
+      const btn = $('btnGenerate');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Generating...';
+
+      try {
+        const payload = {
+          page_type: $('pageType').value,
+          business_name: $('businessName').value,
+          business_description: $('businessDesc').value,
+          target_audience: $('audience').value,
+          key_offering: $('offering').value,
+          tone: $('tone').value,
+          theme: $('theme').value,
+          extra_instructions: $('extra').value,
+          event_date: $('eventDate')?.value || '',
+          event_time: $('eventTime')?.value || '',
+          event_location: $('eventLocation')?.value || '',
+        };
+
+        const resp = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!resp.ok) {
+          const err = await resp.json();
+          throw new Error(err.detail || 'Generation failed');
+        }
+
+        const data = await resp.json();
+        currentHtml = data.html;
+        currentContent = data.content;
+
+        // Render preview in iframe
+        const frame = document.createElement('iframe');
+        frame.style.cssText = 'width:100%;height:100%;border:none;background:#fff;';
+        $('previewFrame').innerHTML = '';
+        $('previewFrame').appendChild(frame);
+        frame.contentDocument.open();
+        frame.contentDocument.write(currentHtml);
+        frame.contentDocument.close();
+
+        $('btnPublish').disabled = false;
+        $('btnDownload').disabled = false;
+        showStatus('Preview generated! Review it, then push to HubSpot.', 'success');
+
+      } catch (err) {
+        showStatus(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Generate Preview';
+      }
+    });
+
+    // Push to HubSpot
+    $('btnPublish').addEventListener('click', async () => {
+      if (!currentHtml) return;
+      clearStatus();
+      const btn = $('btnPublish');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span>Publishing...';
+
+      try {
+        const payload = {
+          html: currentHtml,
+          name: `${$('businessName').value} â ${currentContent.page_title}`,
+          slug: $('slug').value || null,
+          meta_description: currentContent.meta_description,
+          page_title: currentContent.page_title,
+          publish: false, // Draft by default for safety
+        };
+
+        const resp = await fetch('/api/publish', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!resp.ok) {
+          const err = await resp.json();
+          throw new Error(err.detail || 'Publish failed');
+        }
+
+        const data = await resp.json();
+        showStatus(`Page created as DRAFT in HubSpot! ID: ${data.id}`, 'success');
+
+      } catch (err) {
+        showStatus(err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Push to HubSpot';
+      }
+    });
+
+    // Download HTML
+    $('btnDownload').addEventListener('click', () => {
+      if (!currentHtml) return;
+      const blob = new Blob([currentHtml], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `landing-page-${$('pageType').value}.html`;
+      a.click();
+    });
+  </script>
+
+</body>
+</html>
