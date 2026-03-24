@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}</title>
+  <meta name="description" content="{{ meta_description }}">
+  {{ theme_css }}
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); color: var(--theme-text-dark); line-height: 1.65; }
+    h1, h2, h3 { font-family: var(--font-heading); }
+    .hero { background: var(--theme-primary); color: var(--theme-text-light); padding: 100px 24px 80px; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; max-width: 850px; margin: 0 auto 20px; line-height: 1.12; }
+    .hero p { font-size: 1.25rem; opacity: 0.92; max-width: 650px; margin: 0 auto 32px; }
+    .hero .btn-hero { display: inline-block; padding: 16px 40px; background: var(--theme-accent); color: var(--theme-text-light); font-size: 1.15rem; font-weight: 700; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.2s; font-family: var(--font-body); }
+    .hero .btn-hero:hover { background: var(--theme-accent-hover); transform: translateY(-2px); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 80px 0; }
+    .section-alt { background: var(--theme-surface); padding: 80px 24px; }
+    .section h2 { font-size: 2rem; text-align: center; margin-bottom: 16px; color: var(--theme-primary); }
+    .section .subtitle { text-align: center; font-size: 1.1rem; color: var(--theme-text-muted); max-width: 600px; margin: 0 auto 48px; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
+    .service-card { background: #fff; border-radius: 12px; padding: 36px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); border-top: 4px solid var(--theme-accent); }
+    .service-card .icon { font-size: 2.4rem; margin-bottom: 16px; }
+    .service-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--theme-primary); }
+    .service-card p { font-size: 0.95rem; color: var(--theme-text-muted); }
+    .process { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; counter-reset: step; }
+    .process-step { text-align: center; padding: 24px; }
+    .process-step::before { counter-increment: step; content: counter(step); display: flex; width: 48px; height: 48px; background: var(--theme-accent); color: var(--theme-text-light); border-radius: 50%; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; margin: 0 auto 16px; font-family: var(--font-heading); }
+    .process-step h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--theme-primary); }
+    .process-step p { font-size: 0.9rem; color: var(--theme-text-muted); }
+    .cta-band { background: var(--theme-primary); color: var(--theme-text-light); text-align: center; padding: 60px 24px; }
+    .cta-band h2 { font-size: 2rem; margin-bottom: 12px; color: var(--theme-text-light); }
+    .cta-band p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 28px; }
+    .cta-band .btn-cta { display: inline-block; padding: 16px 40px; background: var(--theme-accent); color: var(--theme-text-light); font-size: 1.15rem; font-weight: 700; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.2s; font-family: var(--font-body); }
+    .cta-band .btn-cta:hover { background: var(--theme-accent-hover); transform: translateY(-2px); }
+    .testimonial { padding: 60px 24px; text-align: center; background: #fff; }
+    .testimonial blockquote { font-size: 1.25rem; font-style: italic; color: var(--theme-text-muted); max-width: 700px; margin: 0 auto; }
+    .testimonial cite { display: block; margin-top: 16px; font-size: 0.95rem; color: var(--theme-text-muted); font-style: normal; }
+    .footer { background: var(--theme-primary); color: var(--theme-text-light); text-align: center; padding: 32px 24px; font-size: 0.9rem; opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <h1>{{ headline }}</h1>
+    <p>{{ subheadline }}</p>
+    <a href="#contact" class="btn-hero">{{ cta_text }}</a>
+  </section>
+
+  <div class="container">
+    <div class="section">
+      {% for section in body_sections %}
+      <h2>{{ section.heading }}</h2>
+      <p class="subtitle">{{ section.text }}</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <section class="section-alt">
+    <div class="container">
+      <h2>How We Help</h2>
+      <p class="subtitle">Proven approaches that deliver measurable results.</p>
+      <div class="services-grid">
+        {% for feature in features %}
+        <div class="service-card">
+          <div class="icon">{{ feature.icon }}</div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="section">
+      <h2>Our Process</h2>
+      <p class="subtitle">Simple, transparent, and effective.</p>
+      <div class="process">
+        <div class="process-step">
+          <h3>Discovery Call</h3>
+          <p>We learn about your goals, challenges, and current setup.</p>
+        </div>
+        <div class="process-step">
+          <h3>Custom Strategy</h3>
+          <p>We design a tailored plan aligned with your objectives.</p>
+        </div>
+        <div class="process-step">
+          <h3>Implementation</h3>
+          <p>We execute together with hands-on guidance and support.</p>
+        </div>
+        <div class="process-step">
+          <h3>Measurable Results</h3>
+          <p>We track outcomes and optimize for continuous improvement.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="testimonial">
+    <blockquote>"{{ testimonial_placeholder }}"</blockquote>
+    <cite>â Happy Client</cite>
+  </section>
+
+  <section class="cta-band" id="contact">
+    <h2>Ready to Get Started?</h2>
+    <p>{{ cta_subtext }}</p>
+    <a href="#" class="btn-cta">{{ cta_text }}</a>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; {{ year }} {{ business_name }}. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
