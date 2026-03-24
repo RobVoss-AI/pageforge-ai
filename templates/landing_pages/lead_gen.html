@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}</title>
+  <meta name="description" content="{{ meta_description }}">
+  {{ theme_css }}
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); color: var(--theme-text-dark); line-height: 1.65; }
+    h1, h2, h3 { font-family: var(--font-heading); }
+    .hero { background: var(--theme-primary); color: var(--theme-text-light); padding: 80px 24px 60px; text-align: center; }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; max-width: 800px; margin: 0 auto 16px; line-height: 1.15; }
+    .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; padding: 80px 0; align-items: center; }
+    @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; gap: 40px; padding: 50px 0; } }
+    .two-col h2 { font-size: 1.8rem; margin-bottom: 16px; color: var(--theme-primary); }
+    .two-col p { font-size: 1.05rem; color: var(--theme-text-muted); margin-bottom: 12px; }
+    .form-card { background: var(--theme-surface); border-radius: 12px; padding: 36px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); border: 1px solid var(--theme-border); }
+    .form-card h3 { font-size: 1.3rem; margin-bottom: 20px; color: var(--theme-primary); text-align: center; }
+    .form-card input, .form-card select { width: 100%; padding: 12px 16px; border: 1px solid var(--theme-border); border-radius: 8px; font-size: 1rem; margin-bottom: 14px; transition: border-color 0.2s; font-family: var(--font-body); background: #fff; }
+    .form-card input:focus { outline: none; border-color: var(--theme-accent); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+    .btn-primary { display: block; width: 100%; padding: 14px; background: var(--theme-accent); color: var(--theme-text-light); border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; font-family: var(--font-body); }
+    .btn-primary:hover { background: var(--theme-accent-hover); }
+    .form-subtext { text-align: center; font-size: 0.85rem; color: var(--theme-text-muted); margin-top: 10px; }
+    .features { background: var(--theme-surface); padding: 80px 24px; }
+    .features h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; color: var(--theme-primary); }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; max-width: 1100px; margin: 0 auto; }
+    .feature-card { background: #fff; border-radius: 12px; padding: 32px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); border: 1px solid var(--theme-border); }
+    .feature-icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 1.15rem; margin-bottom: 8px; color: var(--theme-primary); }
+    .feature-card p { font-size: 0.95rem; color: var(--theme-text-muted); }
+    .testimonial { padding: 60px 24px; text-align: center; background: #fff; }
+    .testimonial blockquote { font-size: 1.25rem; font-style: italic; color: var(--theme-text-muted); max-width: 700px; margin: 0 auto; padding: 0 20px; }
+    .testimonial cite { display: block; margin-top: 16px; font-size: 0.95rem; color: var(--theme-text-muted); font-style: normal; }
+    .footer { background: var(--theme-primary); color: var(--theme-text-light); text-align: center; padding: 32px 24px; font-size: 0.9rem; opacity: 0.85; }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <h1>{{ headline }}</h1>
+    <p>{{ subheadline }}</p>
+  </section>
+
+  <div class="container">
+    <div class="two-col">
+      <div class="content-side">
+        {% for section in body_sections %}
+        <h2>{{ section.heading }}</h2>
+        <p>{{ section.text }}</p>
+        {% endfor %}
+      </div>
+      <div class="form-card">
+        <h3>Get Started Today</h3>
+        <input type="text" name="firstname" placeholder="First Name" required>
+        <input type="text" name="lastname" placeholder="Last Name" required>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="text" name="company" placeholder="Company (optional)">
+        <button type="submit" class="btn-primary">{{ cta_text }}</button>
+        <p class="form-subtext">{{ cta_subtext }}</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="features">
+    <h2>What You'll Get</h2>
+    <div class="feature-grid">
+      {% for feature in features %}
+      <div class="feature-card">
+        <div class="feature-icon">{{ feature.icon }}</div>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <blockquote>"{{ testimonial_placeholder }}"</blockquote>
+    <cite>â Happy Customer</cite>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; {{ year }} {{ business_name }}. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
