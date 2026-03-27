@@ -3,191 +3,576 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HubSpot Landing Page Builder</title>
+  <title>PageForge AI - Landing Page Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f5f7; color: #1a1a2e; min-height: 100vh; }
 
-    /* Header */
-    .header { background: linear-gradient(135deg, #0f3460, #16213e); color: #fff; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; }
-    .header h1 { font-size: 1.4rem; font-weight: 700; }
-    .header .badge { background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; }
-    .header .connection-status { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; }
-    .header .dot { width: 8px; height: 8px; border-radius: 50%; }
-    .header .dot.ok { background: #22c55e; }
-    .header .dot.err { background: #ef4444; }
-
-    /* Layout */
-    .layout { display: grid; grid-template-columns: 420px 1fr; min-height: calc(100vh - 72px); }
-    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
-
-    /* Sidebar / Form */
-    .sidebar { background: #fff; padding: 32px; overflow-y: auto; border-right: 1px solid #e5e7eb; }
-    .sidebar h2 { font-size: 1.15rem; margin-bottom: 20px; color: #0f3460; }
-    .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #333; margin-bottom: 6px; }
-    .form-group input, .form-group select, .form-group textarea {
-      width: 100%; padding: 10px 14px; border: 1px solid #d1d5db; border-radius: 8px;
-      font-size: 0.95rem; transition: border-color 0.2s; font-family: inherit;
+    :root {
+      --brand-primary: #6366f1;
+      --brand-primary-dark: #4f46e5;
+      --brand-primary-light: #e0e7ff;
+      --brand-surface: #f8fafc;
+      --brand-bg: #f1f5f9;
+      --brand-card: #ffffff;
+      --brand-border: #e2e8f0;
+      --brand-text: #0f172a;
+      --brand-text-secondary: #475569;
+      --brand-text-muted: #94a3b8;
+      --brand-success: #10b981;
+      --brand-success-bg: #ecfdf5;
+      --brand-error: #ef4444;
+      --brand-error-bg: #fef2f2;
+      --brand-info: #3b82f6;
+      --brand-info-bg: #eff6ff;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --radius-xl: 20px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+      --transition: 0.2s ease;
     }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      outline: none; border-color: #0f3460; box-shadow: 0 0 0 3px rgba(15,52,96,0.08);
-    }
-    .form-group textarea { resize: vertical; min-height: 60px; }
-    .form-group .hint { font-size: 0.78rem; color: #888; margin-top: 4px; }
 
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--brand-bg);
+      color: var(--brand-text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Header ---- */
+    .header {
+      background: var(--brand-card);
+      border-bottom: 1px solid var(--brand-border);
+      padding: 0 28px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo {
+      width: 32px;
+      height: 32px;
+      background: var(--brand-primary);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .header h1 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--brand-text);
+    }
+    .header h1 span {
+      color: var(--brand-primary);
+    }
+    .header-badge {
+      background: var(--brand-primary-light);
+      color: var(--brand-primary);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+    .connection-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--brand-text-secondary);
+    }
+    .conn-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brand-text-muted);
+      transition: background var(--transition);
+    }
+    .conn-dot.ok { background: var(--brand-success); box-shadow: 0 0 6px rgba(16,185,129,0.4); }
+    .conn-dot.err { background: var(--brand-error); }
+
+    /* ---- Layout ---- */
+    .layout {
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      min-height: calc(100vh - 60px);
+    }
+    @media (max-width: 960px) {
+      .layout { grid-template-columns: 1fr; }
+      .preview { min-height: 500px; }
+    }
+
+    /* ---- Sidebar ---- */
+    .sidebar {
+      background: var(--brand-card);
+      border-right: 1px solid var(--brand-border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-content {
+      padding: 28px;
+      flex: 1;
+    }
+    .sidebar-header {
+      margin-bottom: 24px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--brand-text);
+      margin-bottom: 4px;
+    }
+    .sidebar-header p {
+      font-size: 0.82rem;
+      color: var(--brand-text-muted);
+    }
+
+    /* Form Groups */
+    .form-section {
+      margin-bottom: 24px;
+    }
+    .form-section-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--brand-text-muted);
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--brand-border);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--brand-text-secondary);
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 9px 13px;
+      border: 1.5px solid var(--brand-border);
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: var(--brand-text);
+      background: var(--brand-card);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: var(--brand-text-muted);
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 54px;
+    }
+    .form-group .hint {
+      font-size: 0.75rem;
+      color: var(--brand-text-muted);
+      margin-top: 4px;
+    }
+
+    /* Theme Selector */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .theme-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1.5px solid var(--brand-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition);
+      background: var(--brand-card);
+    }
+    .theme-option:hover {
+      border-color: var(--brand-primary-light);
+      background: var(--brand-surface);
+    }
+    .theme-option.selected {
+      border-color: var(--brand-primary);
+      background: var(--brand-primary-light);
+    }
+    .theme-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .theme-swatch::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+    }
+    .theme-option .theme-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--brand-text);
+      line-height: 1.2;
+    }
+    .theme-option .theme-desc {
+      font-size: 0.68rem;
+      color: var(--brand-text-muted);
+      line-height: 1.2;
+    }
+
+    /* Event fields */
     .event-fields { display: none; }
     .event-fields.show { display: block; }
 
-    .btn-row { display: flex; gap: 10px; margin-top: 24px; }
-    .btn { padding: 12px 24px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; flex: 1; }
-    .btn-primary { background: #0f3460; color: #fff; }
-    .btn-primary:hover { background: #0a2647; }
-    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-secondary { background: #e5e7eb; color: #333; }
-    .btn-secondary:hover { background: #d1d5db; }
-    .btn-success { background: #16a34a; color: #fff; }
-    .btn-success:hover { background: #15803d; }
-    .btn-success:disabled { opacity: 0.5; cursor: not-allowed; }
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      padding: 20px 28px;
+      border-top: 1px solid var(--brand-border);
+      background: var(--brand-card);
+      position: sticky;
+      bottom: 0;
+    }
+    .btn {
+      padding: 11px 20px;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex: 1;
+    }
+    .btn-primary {
+      background: var(--brand-primary);
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(99,102,241,0.3);
+    }
+    .btn-primary:hover { background: var(--brand-primary-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-success {
+      background: var(--brand-success);
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(16,185,129,0.3);
+    }
+    .btn-success:hover { background: #059669; transform: translateY(-1px); }
+    .btn-success:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--brand-text-secondary);
+      border: 1.5px solid var(--brand-border);
+      flex: none;
+      padding: 11px 16px;
+    }
+    .btn-ghost:hover { background: var(--brand-surface); border-color: var(--brand-text-muted); }
+    .btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    /* Preview */
-    .preview { background: #e5e7eb; display: flex; flex-direction: column; }
-    .preview-toolbar { background: #fff; padding: 12px 24px; border-bottom: 1px solid #d1d5db; display: flex; align-items: center; justify-content: space-between; }
-    .preview-toolbar span { font-size: 0.85rem; color: #666; }
-    .preview-frame { flex: 1; }
-    .preview-frame iframe { width: 100%; height: 100%; border: none; background: #fff; }
-    .preview-placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: #999; font-size: 1.1rem; }
+    /* Status */
+    .status-bar {
+      margin: 12px 28px 0;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      animation: slideUp 0.25s ease;
+    }
+    .status-bar.show { display: flex; }
+    .status-bar.info { background: var(--brand-info-bg); color: var(--brand-info); border: 1px solid #bfdbfe; }
+    .status-bar.success { background: var(--brand-success-bg); color: #059669; border: 1px solid #a7f3d0; }
+    .status-bar.error { background: var(--brand-error-bg); color: var(--brand-error); border: 1px solid #fecaca; }
 
-    /* Status messages */
-    .status { padding: 12px 16px; border-radius: 8px; margin-top: 16px; font-size: 0.9rem; display: none; }
-    .status.show { display: block; }
-    .status.info { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-    .status.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-    .status.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- Preview Pane ---- */
+    .preview {
+      background: var(--brand-bg);
+      display: flex;
+      flex-direction: column;
+    }
+    .preview-toolbar {
+      background: var(--brand-card);
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--brand-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .preview-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .preview-toolbar .dots {
+      display: flex;
+      gap: 6px;
+    }
+    .preview-toolbar .dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--brand-border);
+    }
+    .preview-toolbar .url-bar {
+      background: var(--brand-surface);
+      border: 1px solid var(--brand-border);
+      border-radius: 6px;
+      padding: 5px 14px;
+      font-size: 0.75rem;
+      color: var(--brand-text-muted);
+      min-width: 200px;
+    }
+    .preview-frame {
+      flex: 1;
+      padding: 16px;
+    }
+    .preview-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: var(--shadow-lg);
+    }
+    .preview-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--brand-text-muted);
+      text-align: center;
+      padding: 40px;
+    }
+    .preview-placeholder .icon-large {
+      width: 80px;
+      height: 80px;
+      background: var(--brand-surface);
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      border: 2px dashed var(--brand-border);
+    }
+    .preview-placeholder h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--brand-text-secondary);
+      margin-bottom: 8px;
+    }
+    .preview-placeholder p {
+      font-size: 0.88rem;
+      max-width: 320px;
+      line-height: 1.5;
+    }
 
     /* Spinner */
-    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 0.8s linear infinite; margin-right: 8px; vertical-align: middle; }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: currentColor;
+      animation: spin 0.7s linear infinite;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Scroll */
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--brand-border); border-radius: 3px; }
+    .sidebar::-webkit-scrollbar-thumb:hover { background: var(--brand-text-muted); }
   </style>
 </head>
 <body>
 
   <header class="header">
-    <div style="display:flex; align-items:center; gap:16px;">
-      <h1>HubSpot Landing Page Builder</h1>
-      <span class="badge">AI-Powered</span>
+    <div class="header-left">
+      <div class="logo">P</div>
+      <h1>Page<span>Forge</span> AI</h1>
+      <span class="header-badge">BETA</span>
     </div>
     <div class="connection-status" id="connStatus">
-      <span class="dot" id="connDot"></span>
+      <span class="conn-dot" id="connDot"></span>
       <span id="connText">Checking...</span>
     </div>
   </header>
 
   <div class="layout">
-    <!-- Form Sidebar -->
+    <!-- Sidebar -->
     <div class="sidebar">
-      <h2>Page Configuration</h2>
-
-      <div class="form-group">
-        <label>Page Type</label>
-        <select id="pageType">
-          <option value="lead_gen">Lead Generation / Opt-In</option>
-          <option value="service">Service Showcase</option>
-          <option value="event">Event / Workshop</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Business Name</label>
-        <input type="text" id="businessName" placeholder="e.g. Acme Consulting">
-      </div>
-
-      <div class="form-group">
-        <label>Business Description</label>
-        <textarea id="businessDesc" rows="2" placeholder="What does the business do? (1-2 sentences)"></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Target Audience</label>
-        <input type="text" id="audience" placeholder="e.g. Small business owners, K-12 educators">
-      </div>
-
-      <div class="form-group">
-        <label>Key Offering</label>
-        <input type="text" id="offering" placeholder="e.g. Free AI readiness assessment, workshop on March 15">
-      </div>
-
-      <div class="form-group">
-        <label>Tone</label>
-        <select id="tone">
-          <option value="professional">Professional</option>
-          <option value="warm">Warm & Approachable</option>
-          <option value="authoritative">Authoritative</option>
-          <option value="casual">Casual</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Visual Theme</label>
-        <select id="theme">
-          <option value="tech-innovation">Tech Innovation â Bold, modern, high-contrast</option>
-          <option value="ocean-depths">Ocean Depths â Professional maritime blues</option>
-          <option value="midnight-galaxy">Midnight Galaxy â Dramatic cosmic purples</option>
-          <option value="sunset-boulevard">Sunset Boulevard â Warm, vibrant sunset tones</option>
-          <option value="forest-canopy">Forest Canopy â Natural earth tones</option>
-          <option value="golden-hour">Golden Hour â Rich autumnal warmth</option>
-          <option value="arctic-frost">Arctic Frost â Cool, crisp precision</option>
-          <option value="desert-rose">Desert Rose â Soft, sophisticated dusty tones</option>
-          <option value="botanical-garden">Botanical Garden â Fresh, vibrant greens</option>
-          <option value="modern-minimalist">Modern Minimalist â Clean grayscale</option>
-        </select>
-        <div class="hint" id="themeBestFor" style="margin-top:4px;"></div>
-      </div>
-
-      <div class="form-group">
-        <label>URL Slug (optional)</label>
-        <input type="text" id="slug" placeholder="e.g. ai-workshop-spring-2026">
-        <div class="hint">Leave blank for auto-generated slug</div>
-      </div>
-
-      <!-- Event-specific fields -->
-      <div class="event-fields" id="eventFields">
-        <div class="form-group">
-          <label>Event Date</label>
-          <input type="text" id="eventDate" placeholder="e.g. April 15, 2026">
+      <div class="sidebar-content">
+        <div class="sidebar-header">
+          <h2>Create Landing Page</h2>
+          <p>Configure your page and generate AI-powered content</p>
         </div>
-        <div class="form-group">
-          <label>Event Time</label>
-          <input type="text" id="eventTime" placeholder="e.g. 9:00 AM - 3:00 PM EST">
+
+        <!-- Page Type -->
+        <div class="form-section">
+          <div class="form-section-title">Page Type</div>
+          <div class="form-group">
+            <select id="pageType">
+              <option value="lead_gen">Lead Generation / Opt-In</option>
+              <option value="service">Service Showcase</option>
+              <option value="event">Event / Workshop</option>
+            </select>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Event Location</label>
-          <input type="text" id="eventLocation" placeholder="e.g. Virtual / Zoom, or a venue name">
+
+        <!-- Business Details -->
+        <div class="form-section">
+          <div class="form-section-title">Business Details</div>
+          <div class="form-group">
+            <label>Business Name</label>
+            <input type="text" id="businessName" placeholder="e.g. Acme Consulting">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="businessDesc" rows="2" placeholder="What does the business do? (1-2 sentences)"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Target Audience</label>
+            <input type="text" id="audience" placeholder="e.g. Small business owners, K-12 educators">
+          </div>
+          <div class="form-group">
+            <label>Key Offering</label>
+            <input type="text" id="offering" placeholder="e.g. Free AI readiness assessment">
+          </div>
         </div>
+
+        <!-- Style & Tone -->
+        <div class="form-section">
+          <div class="form-section-title">Style & Tone</div>
+          <div class="form-group">
+            <label>Writing Tone</label>
+            <select id="tone">
+              <option value="professional">Professional</option>
+              <option value="warm">Warm & Approachable</option>
+              <option value="authoritative">Authoritative</option>
+              <option value="casual">Casual</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Visual Theme</label>
+            <div class="theme-grid" id="themeGrid"></div>
+            <div class="hint" id="themeBestFor" style="margin-top:8px;"></div>
+          </div>
+        </div>
+
+        <!-- Event Fields -->
+        <div class="event-fields" id="eventFields">
+          <div class="form-section">
+            <div class="form-section-title">Event Details</div>
+            <div class="form-group">
+              <label>Event Date</label>
+              <input type="text" id="eventDate" placeholder="e.g. April 15, 2026">
+            </div>
+            <div class="form-group">
+              <label>Event Time</label>
+              <input type="text" id="eventTime" placeholder="e.g. 9:00 AM - 3:00 PM EST">
+            </div>
+            <div class="form-group">
+              <label>Event Location</label>
+              <input type="text" id="eventLocation" placeholder="e.g. Virtual / Zoom">
+            </div>
+          </div>
+        </div>
+
+        <!-- Advanced -->
+        <div class="form-section">
+          <div class="form-section-title">Advanced</div>
+          <div class="form-group">
+            <label>URL Slug <span style="font-weight:400; color:var(--brand-text-muted)">(optional)</span></label>
+            <input type="text" id="slug" placeholder="e.g. ai-workshop-spring-2026">
+            <div class="hint">Leave blank for auto-generated slug</div>
+          </div>
+          <div class="form-group">
+            <label>Extra Instructions <span style="font-weight:400; color:var(--brand-text-muted)">(optional)</span></label>
+            <textarea id="extra" rows="2" placeholder="Additional copywriting guidance..."></textarea>
+          </div>
+        </div>
+
+        <div class="status-bar" id="status"></div>
       </div>
 
-      <div class="form-group">
-        <label>Extra Instructions (optional)</label>
-        <textarea id="extra" rows="2" placeholder="Any additional copywriting guidance..."></textarea>
-      </div>
-
+      <!-- Sticky action bar -->
       <div class="btn-row">
         <button class="btn btn-primary" id="btnGenerate">Generate Preview</button>
         <button class="btn btn-success" id="btnPublish" disabled>Push to HubSpot</button>
+        <button class="btn btn-ghost" id="btnDownload" disabled title="Download HTML">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v9m0 0L5 8m3 3l3-3M3 13h10"/></svg>
+        </button>
       </div>
-
-      <div class="status" id="status"></div>
     </div>
 
-    <!-- Preview Pane -->
+    <!-- Preview -->
     <div class="preview">
       <div class="preview-toolbar">
-        <span>Live Preview</span>
-        <button class="btn btn-secondary" id="btnDownload" style="padding:6px 14px; font-size:0.8rem; flex:none;" disabled>Download HTML</button>
+        <div class="preview-toolbar-left">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <span class="url-bar" id="urlBar">preview</span>
+        </div>
       </div>
       <div class="preview-frame" id="previewFrame">
         <div class="preview-placeholder">
-          Configure your page and click <strong>Generate Preview</strong>
+          <div class="icon-large">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--brand-text-muted)"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <h3>No preview yet</h3>
+          <p>Fill in the details on the left and click <strong>Generate Preview</strong> to create your landing page</p>
         </div>
       </div>
     </div>
@@ -196,63 +581,106 @@
   <script>
     const $ = id => document.getElementById(id);
 
-    // State
+    // -- State --
     let currentHtml = null;
     let currentContent = null;
+    let selectedTheme = 'tech-innovation';
 
-    // Toggle event fields
+    // -- Theme data --
+    const themes = [
+      { slug: 'tech-innovation', name: 'Tech Innovation', primary: '#0a0f1e', accent: '#6366f1', best_for: 'SaaS, startups, AI/ML' },
+      { slug: 'ocean-depths', name: 'Ocean Depths', primary: '#0c2d48', accent: '#2196f3', best_for: 'Finance, consulting, corporate' },
+      { slug: 'midnight-galaxy', name: 'Midnight Galaxy', primary: '#13052e', accent: '#a855f7', best_for: 'Entertainment, gaming, luxury' },
+      { slug: 'sunset-boulevard', name: 'Sunset Boulevard', primary: '#7c2d12', accent: '#f97316', best_for: 'Marketing, events, lifestyle' },
+      { slug: 'forest-canopy', name: 'Forest Canopy', primary: '#1a2e1a', accent: '#22c55e', best_for: 'Sustainability, wellness, education' },
+      { slug: 'golden-hour', name: 'Golden Hour', primary: '#2c1810', accent: '#d97706', best_for: 'Hospitality, restaurants, artisan' },
+      { slug: 'arctic-frost', name: 'Arctic Frost', primary: '#0c1929', accent: '#06b6d4', best_for: 'Healthcare, pharma, clean tech' },
+      { slug: 'desert-rose', name: 'Desert Rose', primary: '#2e1a1e', accent: '#e11d48', best_for: 'Fashion, beauty, interior design' },
+      { slug: 'botanical-garden', name: 'Botanical Garden', primary: '#052e16', accent: '#10b981', best_for: 'Food brands, farm-to-table' },
+      { slug: 'modern-minimalist', name: 'Modern Minimalist', primary: '#111111', accent: '#171717', best_for: 'Architecture, design, tech' },
+    ];
+
+    // -- Build theme grid --
+    function buildThemeGrid() {
+      const grid = $('themeGrid');
+      grid.innerHTML = themes.map(t => `
+        <div class="theme-option${t.slug === selectedTheme ? ' selected' : ''}" data-theme="${t.slug}">
+          <div class="theme-swatch" style="background:${t.primary};">
+            <div style="position:absolute;bottom:0;left:0;right:0;height:8px;background:${t.accent};"></div>
+          </div>
+          <div>
+            <div class="theme-label">${t.name}</div>
+          </div>
+        </div>
+      `).join('');
+
+      grid.querySelectorAll('.theme-option').forEach(el => {
+        el.addEventListener('click', () => {
+          grid.querySelectorAll('.theme-option').forEach(e => e.classList.remove('selected'));
+          el.classList.add('selected');
+          selectedTheme = el.dataset.theme;
+          updateThemeHint();
+        });
+      });
+      updateThemeHint();
+    }
+
+    function updateThemeHint() {
+      const t = themes.find(t => t.slug === selectedTheme);
+      $('themeBestFor').textContent = t ? `Best for: ${t.best_for}` : '';
+    }
+
+    buildThemeGrid();
+
+    // -- Toggle event fields --
     $('pageType').addEventListener('change', () => {
       $('eventFields').classList.toggle('show', $('pageType').value === 'event');
     });
 
-    // Theme best-for hints
-    const themeBestFor = {
-      'tech-innovation': 'Best for: SaaS, startups, AI/ML, digital transformation',
-      'ocean-depths': 'Best for: Finance, consulting, corporate, professional services',
-      'midnight-galaxy': 'Best for: Entertainment, gaming, luxury brands, creative agencies',
-      'sunset-boulevard': 'Best for: Marketing, events, lifestyle brands, creative pitches',
-      'forest-canopy': 'Best for: Sustainability, wellness, education, outdoor brands',
-      'golden-hour': 'Best for: Hospitality, restaurants, artisan products, fall campaigns',
-      'arctic-frost': 'Best for: Healthcare, pharma, clean tech, data-driven businesses',
-      'desert-rose': 'Best for: Fashion, beauty, interior design, boutique businesses',
-      'botanical-garden': 'Best for: Food brands, farm-to-table, garden centers, natural products',
-      'modern-minimalist': 'Best for: Architecture, design, tech, modern business proposals',
-    };
-    function updateThemeHint() {
-      $('themeBestFor').textContent = themeBestFor[$('theme').value] || '';
-    }
-    $('theme').addEventListener('change', updateThemeHint);
-    updateThemeHint();
-
-    // Check connection on load
+    // -- Check connection --
     (async () => {
       try {
         const resp = await fetch('/api/status');
         const data = await resp.json();
-        $('connDot').className = data.hubspot_connected ? 'dot ok' : 'dot err';
-        $('connText').textContent = data.hubspot_connected ? 'HubSpot Connected' : 'HubSpot Not Connected';
+        const ok = data.hubspot_configured && data.ai_configured && data.status === 'ok';
+        $('connDot').className = ok ? 'conn-dot ok' : 'conn-dot err';
+        $('connText').textContent = ok ? 'Connected' : (data.errors?.join(', ') || 'Configuration issues');
       } catch {
-        $('connDot').className = 'dot err';
+        $('connDot').className = 'conn-dot err';
         $('connText').textContent = 'Connection Error';
       }
     })();
 
+    // -- Status helpers --
     function showStatus(msg, type) {
       const el = $('status');
       el.textContent = msg;
-      el.className = `status show ${type}`;
+      el.className = `status-bar show ${type}`;
     }
-
     function clearStatus() {
-      $('status').className = 'status';
+      $('status').className = 'status-bar';
     }
 
-    // Generate preview
+    // -- Validate form --
+    function validateForm() {
+      const required = ['businessName', 'businessDesc', 'audience', 'offering'];
+      const missing = required.filter(id => !$(id).value.trim());
+      if (missing.length) {
+        const labels = { businessName: 'Business Name', businessDesc: 'Description', audience: 'Target Audience', offering: 'Key Offering' };
+        showStatus(`Please fill in: ${missing.map(id => labels[id]).join(', ')}`, 'error');
+        $(missing[0]).focus();
+        return false;
+      }
+      return true;
+    }
+
+    // -- Generate preview --
     $('btnGenerate').addEventListener('click', async () => {
+      if (!validateForm()) return;
       clearStatus();
       const btn = $('btnGenerate');
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span>Generating...';
+      btn.innerHTML = '<span class="spinner"></span> Generating...';
 
       try {
         const payload = {
@@ -262,7 +690,7 @@
           target_audience: $('audience').value,
           key_offering: $('offering').value,
           tone: $('tone').value,
-          theme: $('theme').value,
+          theme: selectedTheme,
           extra_instructions: $('extra').value,
           event_date: $('eventDate')?.value || '',
           event_time: $('eventTime')?.value || '',
@@ -284,43 +712,44 @@
         currentHtml = data.html;
         currentContent = data.content;
 
-        // Render preview in iframe
+        // Render in iframe
         const frame = document.createElement('iframe');
-        frame.style.cssText = 'width:100%;height:100%;border:none;background:#fff;';
+        frame.style.cssText = 'width:100%;height:100%;border:none;border-radius:var(--radius-lg);background:#fff;box-shadow:var(--shadow-lg);';
         $('previewFrame').innerHTML = '';
         $('previewFrame').appendChild(frame);
         frame.contentDocument.open();
         frame.contentDocument.write(currentHtml);
         frame.contentDocument.close();
 
+        $('urlBar').textContent = $('slug').value || `${$('pageType').value}-${$('businessName').value.toLowerCase().replace(/\s+/g, '-')}`;
         $('btnPublish').disabled = false;
         $('btnDownload').disabled = false;
-        showStatus('Preview generated! Review it, then push to HubSpot.', 'success');
+        showStatus('Preview generated! Review it, then push to HubSpot or download.', 'success');
 
       } catch (err) {
         showStatus(err.message, 'error');
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Generate Preview';
+        btn.innerHTML = 'Generate Preview';
       }
     });
 
-    // Push to HubSpot
+    // -- Push to HubSpot --
     $('btnPublish').addEventListener('click', async () => {
-      if (!currentHtml) return;
+      if (!currentHtml || !currentContent) return;
       clearStatus();
       const btn = $('btnPublish');
       btn.disabled = true;
-      btn.innerHTML = '<span class="spinner"></span>Publishing...';
+      btn.innerHTML = '<span class="spinner"></span> Publishing...';
 
       try {
         const payload = {
-          html: currentHtml,
-          name: `${$('businessName').value} â ${currentContent.page_title}`,
+          html_body: currentHtml,
+          business_name: $('businessName').value,
+          page_title: currentContent.page_title,
           slug: $('slug').value || null,
           meta_description: currentContent.meta_description,
-          page_title: currentContent.page_title,
-          publish: false, // Draft by default for safety
+          publish: false,
         };
 
         const resp = await fetch('/api/publish', {
@@ -335,24 +764,25 @@
         }
 
         const data = await resp.json();
-        showStatus(`Page created as DRAFT in HubSpot! ID: ${data.id}`, 'success');
+        showStatus(`Page created as DRAFT in HubSpot! Page ID: ${data.page_id}`, 'success');
 
       } catch (err) {
         showStatus(err.message, 'error');
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Push to HubSpot';
+        btn.innerHTML = 'Push to HubSpot';
       }
     });
 
-    // Download HTML
+    // -- Download HTML --
     $('btnDownload').addEventListener('click', () => {
       if (!currentHtml) return;
       const blob = new Blob([currentHtml], { type: 'text/html' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `landing-page-${$('pageType').value}.html`;
+      a.download = `${$('businessName').value.replace(/\s+/g, '-').toLowerCase()}-${$('pageType').value}.html`;
       a.click();
+      URL.revokeObjectURL(a.href);
     });
   </script>
 
