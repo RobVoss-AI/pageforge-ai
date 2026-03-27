@@ -8,45 +8,224 @@
   {{ theme_css }}
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--font-body); color: var(--theme-text-dark); line-height: 1.65; }
+    body { font-family: var(--font-body); color: var(--theme-text-dark); line-height: 1.65; background: #fff; }
     h1, h2, h3 { font-family: var(--font-heading); }
-    .hero { background: var(--theme-primary); color: var(--theme-text-light); padding: 100px 24px 80px; text-align: center; }
-    .hero h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 800; max-width: 850px; margin: 0 auto 20px; line-height: 1.12; }
-    .hero p { font-size: 1.25rem; opacity: 0.92; max-width: 650px; margin: 0 auto 32px; }
-    .hero .btn-hero { display: inline-block; padding: 16px 40px; background: var(--theme-accent); color: var(--theme-text-light); font-size: 1.15rem; font-weight: 700; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.2s; font-family: var(--font-body); }
-    .hero .btn-hero:hover { background: var(--theme-accent-hover); transform: translateY(-2px); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate { opacity: 0; animation: fadeUp 0.6s ease forwards; }
+    .delay-1 { animation-delay: 0.15s; }
+    .delay-2 { animation-delay: 0.3s; }
+
+    /* Hero */
+    .hero {
+      background: var(--theme-hero-gradient, var(--theme-primary));
+      color: var(--theme-text-light);
+      padding: 110px 24px 90px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 0%, rgba(255,255,255,0.06) 0%, transparent 60%);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      max-width: 850px;
+      margin: 0 auto 20px;
+      line-height: 1.1;
+      position: relative;
+    }
+    .hero p {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      max-width: 650px;
+      margin: 0 auto 36px;
+      position: relative;
+    }
+    .btn-hero {
+      display: inline-block;
+      padding: 16px 44px;
+      background: var(--theme-accent);
+      color: var(--theme-text-light);
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      font-family: var(--font-body);
+      position: relative;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .btn-hero:hover {
+      background: var(--theme-accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+    /* Sections */
     .section { padding: 80px 0; }
     .section-alt { background: var(--theme-surface); padding: 80px 24px; }
-    .section h2 { font-size: 2rem; text-align: center; margin-bottom: 16px; color: var(--theme-primary); }
-    .section .subtitle { text-align: center; font-size: 1.1rem; color: var(--theme-text-muted); max-width: 600px; margin: 0 auto 48px; }
-    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; }
-    .service-card { background: #fff; border-radius: 12px; padding: 36px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); border-top: 4px solid var(--theme-accent); }
-    .service-card .icon { font-size: 2.4rem; margin-bottom: 16px; }
-    .service-card h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--theme-primary); }
-    .service-card p { font-size: 0.95rem; color: var(--theme-text-muted); }
-    .process { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 32px; counter-reset: step; }
-    .process-step { text-align: center; padding: 24px; }
-    .process-step::before { counter-increment: step; content: counter(step); display: flex; width: 48px; height: 48px; background: var(--theme-accent); color: var(--theme-text-light); border-radius: 50%; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; margin: 0 auto 16px; font-family: var(--font-heading); }
-    .process-step h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--theme-primary); }
-    .process-step p { font-size: 0.9rem; color: var(--theme-text-muted); }
-    .cta-band { background: var(--theme-primary); color: var(--theme-text-light); text-align: center; padding: 60px 24px; }
-    .cta-band h2 { font-size: 2rem; margin-bottom: 12px; color: var(--theme-text-light); }
-    .cta-band p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 28px; }
-    .cta-band .btn-cta { display: inline-block; padding: 16px 40px; background: var(--theme-accent); color: var(--theme-text-light); font-size: 1.15rem; font-weight: 700; border-radius: 8px; text-decoration: none; transition: background 0.2s, transform 0.2s; font-family: var(--font-body); }
-    .cta-band .btn-cta:hover { background: var(--theme-accent-hover); transform: translateY(-2px); }
-    .testimonial { padding: 60px 24px; text-align: center; background: #fff; }
-    .testimonial blockquote { font-size: 1.25rem; font-style: italic; color: var(--theme-text-muted); max-width: 700px; margin: 0 auto; }
-    .testimonial cite { display: block; margin-top: 16px; font-size: 0.95rem; color: var(--theme-text-muted); font-style: normal; }
-    .footer { background: var(--theme-primary); color: var(--theme-text-light); text-align: center; padding: 32px 24px; font-size: 0.9rem; opacity: 0.85; }
+    .section h2 { font-size: 2rem; text-align: center; margin-bottom: 12px; color: var(--theme-primary); }
+    .section .subtitle {
+      text-align: center;
+      font-size: 1.08rem;
+      color: var(--theme-text-muted);
+      max-width: 600px;
+      margin: 0 auto 48px;
+      line-height: 1.6;
+    }
+
+    /* Service cards */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 36px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      border: 1px solid var(--theme-border);
+      border-top: 4px solid var(--theme-accent);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    }
+    .service-card .icon {
+      width: 52px;
+      height: 52px;
+      background: var(--theme-surface);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin-bottom: 18px;
+    }
+    .service-card h3 { font-size: 1.15rem; margin-bottom: 10px; color: var(--theme-primary); }
+    .service-card p { font-size: 0.95rem; color: var(--theme-text-muted); line-height: 1.6; }
+
+    /* Process steps */
+    .process {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      counter-reset: step;
+    }
+    .process-step {
+      text-align: center;
+      padding: 24px;
+      position: relative;
+    }
+    .process-step::before {
+      counter-increment: step;
+      content: counter(step);
+      display: flex;
+      width: 52px;
+      height: 52px;
+      background: var(--theme-accent);
+      color: var(--theme-text-light);
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 auto 18px;
+      font-family: var(--font-heading);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .process-step h3 { font-size: 1.05rem; margin-bottom: 8px; color: var(--theme-primary); }
+    .process-step p { font-size: 0.9rem; color: var(--theme-text-muted); line-height: 1.55; }
+
+    /* CTA Band */
+    .cta-band {
+      background: var(--theme-hero-gradient, var(--theme-primary));
+      color: var(--theme-text-light);
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-band::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 100%, rgba(255,255,255,0.04) 0%, transparent 60%);
+    }
+    .cta-band h2 { font-size: 2.2rem; margin-bottom: 14px; color: var(--theme-text-light); position: relative; }
+    .cta-band p { font-size: 1.12rem; opacity: 0.9; margin-bottom: 32px; position: relative; }
+    .btn-cta {
+      display: inline-block;
+      padding: 16px 44px;
+      background: var(--theme-accent);
+      color: var(--theme-text-light);
+      font-size: 1.15rem;
+      font-weight: 700;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      font-family: var(--font-body);
+      position: relative;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .btn-cta:hover {
+      background: var(--theme-accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    /* Testimonial */
+    .testimonial {
+      padding: 80px 24px;
+      text-align: center;
+      background: #fff;
+    }
+    .testimonial blockquote {
+      font-size: 1.3rem;
+      font-style: italic;
+      color: var(--theme-text-muted);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .testimonial cite {
+      display: block;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      color: var(--theme-text-muted);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--theme-primary);
+      color: var(--theme-text-light);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 0.88rem;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
 
-  <section class="hero">
-    <h1>{{ headline }}</h1>
-    <p>{{ subheadline }}</p>
-    <a href="#contact" class="btn-hero">{{ cta_text }}</a>
+  <section class="hero" role="banner">
+    <h1 class="animate">{{ headline }}</h1>
+    <p class="animate delay-1">{{ subheadline }}</p>
+    <a href="#contact" class="btn-hero animate delay-2">{{ cta_text }}</a>
   </section>
 
   <div class="container">
@@ -58,14 +237,14 @@
     </div>
   </div>
 
-  <section class="section-alt">
+  <section class="section-alt" aria-label="Services">
     <div class="container">
       <h2>How We Help</h2>
       <p class="subtitle">Proven approaches that deliver measurable results.</p>
       <div class="services-grid">
         {% for feature in features %}
         <div class="service-card">
-          <div class="icon">{{ feature.icon }}</div>
+          <div class="icon" aria-hidden="true">{{ feature.icon }}</div>
           <h3>{{ feature.title }}</h3>
           <p>{{ feature.description }}</p>
         </div>
@@ -75,7 +254,7 @@
   </section>
 
   <div class="container">
-    <div class="section">
+    <div class="section" aria-label="Our process">
       <h2>Our Process</h2>
       <p class="subtitle">Simple, transparent, and effective.</p>
       <div class="process">
@@ -99,18 +278,18 @@
     </div>
   </div>
 
-  <section class="testimonial">
+  <section class="testimonial" aria-label="Testimonial">
     <blockquote>"{{ testimonial_placeholder }}"</blockquote>
-    <cite>â Happy Client</cite>
+    <cite>&mdash; Happy Client</cite>
   </section>
 
-  <section class="cta-band" id="contact">
+  <section class="cta-band" id="contact" aria-label="Call to action">
     <h2>Ready to Get Started?</h2>
     <p>{{ cta_subtext }}</p>
     <a href="#" class="btn-cta">{{ cta_text }}</a>
   </section>
 
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <p>&copy; {{ year }} {{ business_name }}. All rights reserved.</p>
   </footer>
 
