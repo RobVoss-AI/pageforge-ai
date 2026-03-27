@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PageForge AI &#8212; HubSpot Landing Pages in 60 Seconds</title>
-  <meta name="description" content="AI-powered landing page builder for HubSpot. Generate conversion-optimized pages with Claude AI and publish directly to HubSpot CMS in under a minute.">
+  <meta name="description" content="AI-powered landing page builder for HubSpot. 10 themes, 3 templates, live preview, Claude AI copy. Publish to HubSpot CMS in under a minute.">
   <meta property="og:title" content="PageForge AI &#8212; HubSpot Landing Pages in 60 Seconds">
   <meta property="og:description" content="Stop spending hours on landing pages. Tell AI what you're selling, pick a template, and publish to HubSpot in one click.">
   <meta property="og:type" content="website">
@@ -23,7 +23,7 @@
     "name": "PageForge AI",
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web, CLI",
-    "description": "AI-powered landing page builder for HubSpot CMS. Generate conversion-optimized pages with Claude AI and publish directly to HubSpot in under a minute.",
+    "description": "AI-powered landing page builder for HubSpot CMS. 10 visual themes, 3 templates, live preview UI, and Claude AI copy generation. Publish directly to HubSpot in under a minute.",
     "url": "https://pageforge-ai.vercel.app/",
     "offers": [
       {
@@ -31,21 +31,21 @@
         "name": "Starter",
         "price": "197",
         "priceCurrency": "USD",
-        "description": "All 3 page templates, CLI interface, AI content generation, HubSpot CMS integration, local preview mode"
+        "description": "All 3 page templates, 10 visual themes, CLI interface, AI content generation, HubSpot CMS integration, HTML export"
       },
       {
         "@type": "Offer",
         "name": "Professional",
         "price": "397",
         "priceCurrency": "USD",
-        "description": "Everything in Starter plus Web UI with live preview, 1 hour setup call, priority email support, custom template add-on"
+        "description": "Everything in Starter plus Web UI with live split-pane preview, visual theme selector, 1 hour setup call, priority email support, custom template add-on"
       },
       {
         "@type": "Offer",
         "name": "Enterprise",
         "price": "997",
         "priceCurrency": "USD",
-        "description": "Everything in Professional plus custom branded templates, full installation and config, 90-day support, team training session"
+        "description": "Everything in Professional plus custom branded themes and templates, full installation and config, 90-day support, team training session"
       }
     ],
     "creator": {
@@ -185,7 +185,13 @@
     .demo-field .mock-select { display: flex; gap: 6px; }
     .demo-field .mock-pill { background: #0d1020; border: 1px solid var(--dark-border); border-radius: 6px; padding: 6px 12px; font-size: 0.78rem; color: var(--text-muted); cursor: default; }
     .demo-field .mock-pill.active { background: var(--brand-glow); border-color: rgba(255,107,43,0.3); color: var(--brand); }
+    .mock-theme-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .mock-theme-swatch { width: 100%; aspect-ratio: 1; border-radius: 6px; cursor: default; border: 2px solid transparent; transition: border-color 0.2s, transform 0.2s; }
+    .mock-theme-swatch:hover { transform: scale(1.1); }
+    .mock-theme-swatch.active { border-color: #fff; box-shadow: 0 0 8px rgba(255,255,255,0.3); }
     .demo-btn-generate { width: 100%; padding: 11px; background: var(--brand); color: #fff; border: none; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: default; margin-top: 8px; }
+    .demo-actions { display: flex; gap: 6px; }
+    .demo-action-btn { background: #e2e8f0; border: none; border-radius: 4px; padding: 3px 8px; font-size: 0.62rem; color: #475569; font-weight: 600; cursor: default; display: flex; align-items: center; gap: 3px; }
     .demo-preview { background: #fff; display: flex; flex-direction: column; }
     .demo-preview-bar { background: #f1f5f9; padding: 8px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #e2e8f0; }
     .demo-preview-bar .url { background: #fff; border-radius: 4px; padding: 4px 10px; font-size: 0.72rem; color: #64748b; font-family: 'JetBrains Mono', monospace; flex: 1; }
@@ -218,8 +224,9 @@
 
     /* ââ Features Grid âââââââââââââââââââââââââââââââââââââ */
     .features-section { padding: 100px 0; }
-    .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-    @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media (max-width: 960px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .features-grid { grid-template-columns: 1fr; } }
     .feature { background: var(--dark-card); border: 1px solid var(--dark-border); border-radius: var(--radius); padding: 32px; transition: border-color 0.3s; }
     .feature:hover { border-color: rgba(255,107,43,0.2); }
     .feature-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 18px; }
@@ -229,6 +236,8 @@
     .feat-blue .feature-icon { background: rgba(59,130,246,0.1); }
     .feat-green .feature-icon { background: rgba(34,197,94,0.1); }
     .feat-purple .feature-icon { background: rgba(168,85,247,0.1); }
+    .feat-gold .feature-icon { background: rgba(234,179,8,0.1); }
+    .feat-teal .feature-icon { background: rgba(20,184,166,0.1); }
 
     /* ââ Templates ââââââââââââââââââââââââââââââââââââââââââ */
     .templates-section { padding: 100px 0; }
@@ -246,6 +255,15 @@
     .template-card-body { padding: 24px; }
     .template-card-body h3 { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
     .template-card-body p { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* ââ Themes ââââââââââââââââââââââââââââââââââââââââââââ */
+    .themes-section { padding: 100px 0; }
+    .themes-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }
+    @media (max-width: 768px) { .themes-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 480px) { .themes-grid { grid-template-columns: repeat(2, 1fr); } }
+    .theme-chip { border-radius: 12px; padding: 28px 16px; text-align: center; transition: transform 0.3s, box-shadow 0.3s; cursor: default; }
+    .theme-chip:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+    .theme-chip span { color: #fff; font-size: 0.78rem; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
 
     /* ââ Pricing ââââââââââââââââââââââââââââââââââââââââââââ */
     .pricing-section { padding: 100px 0; }
@@ -303,6 +321,7 @@
       <div class="nav-links">
         <a href="#how">How It Works</a>
         <a href="#features">Features</a>
+        <a href="#themes">Themes</a>
         <a href="#pricing">Pricing</a>
         <a href="#cta" class="btn-nav">Get Access</a>
       </div>
@@ -321,6 +340,7 @@
       </div>
       <div class="hero-proof">
         <span>&#9889; Pages live in under 60 seconds</span>
+        <span>&#127912; 10 stunning visual themes</span>
         <span>&#128196; 3 battle-tested templates</span>
         <span>&#128268; Direct HubSpot CMS push</span>
       </div>
@@ -367,6 +387,21 @@
                 <div class="mock-pill">Casual</div>
               </div>
             </div>
+            <div class="demo-field">
+              <label>Theme</label>
+              <div class="mock-theme-grid">
+                <div class="mock-theme-swatch active" style="background:linear-gradient(135deg,#6366f1,#818cf8);" title="Tech Innovation"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#0369a1,#38bdf8);" title="Ocean Depths"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#1e1b4b,#7c3aed);" title="Midnight Galaxy"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#ea580c,#facc15);" title="Sunset Boulevard"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#166534,#4ade80);" title="Forest Canopy"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#d97706,#fbbf24);" title="Golden Hour"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#0e7490,#a5f3fc);" title="Arctic Frost"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#9f1239,#fda4af);" title="Desert Rose"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#15803d,#86efac);" title="Botanical Garden"></div>
+                <div class="mock-theme-swatch" style="background:linear-gradient(135deg,#334155,#94a3b8);" title="Modern Minimalist"></div>
+              </div>
+            </div>
             <div class="demo-btn-generate">&#10024; Generate Preview</div>
           </div>
           <div class="demo-preview">
@@ -376,7 +411,11 @@
                 <span style="width:8px;height:8px;border-radius:50%;background:#ccc;"></span>
               </div>
               <div class="url">apexfinancial.com/ai-cost-audit</div>
-              <span style="font-size:0.7rem;color:#16a34a;font-weight:600;">â HubSpot Ready</span>
+              <div class="demo-actions">
+                <span class="demo-action-btn">&#128190; Download</span>
+                <span class="demo-action-btn">&#128203; Copy</span>
+              </div>
+              <span style="font-size:0.7rem;color:#16a34a;font-weight:600;">&#9679; HubSpot Ready</span>
             </div>
             <div class="demo-preview-content">
               <div class="mini-hero">
@@ -447,7 +486,7 @@
       <div class="section-header">
         <div class="badge" style="margin-bottom:16px;">Powerful</div>
         <h2>Built for Speed and Scale</h2>
-        <p>Everything you need to ship landing pages without the bottleneck.</p>
+        <p>Every tool you need to ship conversion-ready landing pages &#8212; without the bottleneck.</p>
       </div>
       <div class="features-grid">
         <div class="feature feat-orange">
@@ -463,12 +502,22 @@
         <div class="feature feat-green">
           <div class="feature-icon">&#128421;&#65039;</div>
           <h3>CLI + Web Interface</h3>
-          <p>Power users get a fast CLI with flags for everything. Everyone else gets a clean browser UI with live preview. Same engine, two doors.</p>
+          <p>Power users get a fast CLI with flags for everything. Everyone else gets a redesigned split-pane browser UI with live iframe preview. Same engine, two doors.</p>
         </div>
         <div class="feature feat-purple">
           <div class="feature-icon">&#128241;</div>
           <h3>Mobile-First Templates</h3>
           <p>Three responsive, professionally designed templates that look great on every screen. No CSS tweaking required.</p>
+        </div>
+        <div class="feature feat-gold">
+          <div class="feature-icon">&#127912;</div>
+          <h3>10 Visual Themes</h3>
+          <p>From Tech Innovation to Desert Rose &#8212; pick a visual identity that matches your brand. Each theme ships with custom colors, gradients, and typography.</p>
+        </div>
+        <div class="feature feat-teal">
+          <div class="feature-icon">&#128190;</div>
+          <h3>Export Anywhere</h3>
+          <p>Download the rendered HTML, copy it to your clipboard, or push straight to HubSpot. Your pages, your way &#8212; no vendor lock-in.</p>
         </div>
       </div>
     </div>
@@ -523,6 +572,29 @@
     </div>
   </section>
 
+  <!-- Themes -->
+  <section class="themes-section" id="themes">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge" style="margin-bottom:16px;">Themes</div>
+        <h2>10 Themes. Zero Design Work.</h2>
+        <p>Every theme ships with custom colors, gradients, and typography &#8212; ready to match your brand.</p>
+      </div>
+      <div class="themes-grid">
+        <div class="theme-chip" style="background:linear-gradient(135deg,#6366f1,#818cf8);"><span>Tech Innovation</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#0369a1,#38bdf8);"><span>Ocean Depths</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#1e1b4b,#7c3aed);"><span>Midnight Galaxy</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#ea580c,#facc15);"><span>Sunset Boulevard</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#166534,#4ade80);"><span>Forest Canopy</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#d97706,#fbbf24);"><span>Golden Hour</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#0e7490,#a5f3fc);"><span>Arctic Frost</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#9f1239,#fda4af);"><span>Desert Rose</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#15803d,#86efac);"><span>Botanical Garden</span></div>
+        <div class="theme-chip" style="background:linear-gradient(135deg,#334155,#94a3b8);"><span>Modern Minimalist</span></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Pricing -->
   <section class="pricing-section" id="pricing">
     <div class="container">
@@ -538,10 +610,11 @@
           <p class="price-desc">For solo marketers and small teams</p>
           <ul class="price-features">
             <li>All 3 page templates</li>
+            <li>10 visual themes</li>
             <li>CLI interface</li>
             <li>AI content generation</li>
             <li>HubSpot CMS integration</li>
-            <li>Local preview mode</li>
+            <li>HTML export + clipboard copy</li>
           </ul>
           <a href="mailto:robvoss@vossaiconsulting.com?subject=PageForge%20AI%20-%20Starter%20($197)&amp;body=Hi%20Rob%2C%20I%27m%20interested%20in%20the%20PageForge%20AI%20Starter%20package." class="btn-price btn-price-outline">Get Starter</a>
         </div>
@@ -551,7 +624,8 @@
           <p class="price-desc">For agencies and growing teams</p>
           <ul class="price-features">
             <li>Everything in Starter</li>
-            <li>Web UI with live preview</li>
+            <li>Web UI with live split-pane preview</li>
+            <li>Visual theme selector</li>
             <li>1 hour setup call</li>
             <li>Priority email support</li>
             <li>Custom template add-on</li>
@@ -564,7 +638,7 @@
           <p class="price-desc">For teams that need white-glove setup</p>
           <ul class="price-features">
             <li>Everything in Professional</li>
-            <li>Custom branded templates</li>
+            <li>Custom branded themes + templates</li>
             <li>Full installation + config</li>
             <li>90-day support included</li>
             <li>Team training session</li>
