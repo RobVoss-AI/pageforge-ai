@@ -6,6 +6,7 @@ Loads HTML templates and renders them with AI-generated content and theme CSS.
 from datetime import datetime
 from pathlib import Path
 
+from markupsafe import Markup
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from services.themes import get_theme_css
@@ -40,7 +41,7 @@ class TemplateEngine:
 
         context = {
             # Theme
-            "theme_css": theme_css,
+            "theme_css": Markup(theme_css),
             # Content
             "headline": content.headline,
             "subheadline": content.subheadline,
